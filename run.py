@@ -84,8 +84,9 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write('OK'.encode('utf-8'))
+        data = json.loads(post_data)
         if serverOnly:
-            print(json.dumps(post_data, indent=2))
+            print(json.dumps(data, indent=2))
 
 
 @click.command()
