@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="cz">
+  <head>
+    <meta charset="utf-8">
+    <title>Můj počítač</title>
+  </head>
+  <body onload="load()">
+    <table>
+      <tr><th>Uživatel</th><td id="user"></td></tr>
+      <tr><th>IP adresa</th><td id="ip"></td></tr>
+      <tr><th>MAC adresa</th><td id="mac"></td></tr>
+    </table>
+    <table id="apps">
+      <tr><th>PID</th><th>Program</th><th>Popis</th></tr>
+    </table>
+  </body>
+  <script>
+    function load() {
+      fetch("http://localhost:8080/info.json", {cache: "no-store"})
+        .then((response) => response.json())
+        .then((json) => {
+          document.getElementById("user").innerText = json["user"];
+          document.getElementById("ip").innerText = json["ip"];
+          document.getElementById("mac").innerText = json["mac"];
+          let tab = "<tr><th>Id</th><th>Program</th><th>Popis</th></tr>\n";
+          for (const element of json["apps"]) {
+            tab += "<tr><td>" + element[0] + "</td><td>" + element[1] + "</td><td>" + element[2] + "</td></tr>\n";
+          }
+          document.getElementById("apps").innerHTML = tab;
+        });
+      setTimeout(load, 2000);
+    }
+  </script>
+</html>
