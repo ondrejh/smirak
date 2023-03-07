@@ -7,6 +7,7 @@ from threading import Thread
 from time import sleep
 import os
 import requests
+import click
 
 from collect import get_info
 
@@ -14,7 +15,9 @@ host = "localhost"
 port = 8080
 url = "http://" + str(host) + ":" + str(port)
 
-info = get_info()
+serverOnly = False
+
+info = {}#get_info()
 files = {}
 
 def readFiles():
@@ -81,17 +84,32 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
         self.wfile.write('OK'.encode('utf-8'))
-        #print(post_data)
+        if serverOnly:
+            print(json.dumps(post_data, indent=2))
 
 
-if __name__ == "__main__":
+@click.command()
+@click.option('--server', is_flag=True, default=False, help='Run server part only (no local data aquisition).')
+def run(server):
+    global serverOnly
+    serverOnly = server
+    if serverOnly:
+        print('Run server only (no local data aquisition).')
+
+    global info
+
     readFiles()
 
-    infoPoller = InfoPoller(5.0)
-    infoPoller.start()
+    if not serverOnly:
+        info = get_info()
+        infoPoller = InfoPoller(5.0)
+        infoPoller.start()
+    else:
+        global host
+        host = '0.0.0.0'
 
     webServer = HTTPServer((host, port), MyServer)
-    print("Server started http://%s%s" %(host, port))
+    print("Server started http://%s:%s" %(host, port))
 
     try:
         webServer.serve_forever()
@@ -99,6 +117,11 @@ if __name__ == "__main__":
         print("Caught: {}: {}".format(exc.__class__.__name__, exc))
 
     webServer.server_close()
-    infoPoller.stop()
+    if not serverOnly:
+        infoPoller.stop()
 
     print("Server stopped")
+
+
+if __name__ == "__main__":
+    run()
