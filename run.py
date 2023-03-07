@@ -89,6 +89,7 @@ class MyServer(BaseHTTPRequestHandler):
         except json.decoder.JSONDecodeError:
             data = None
             self.wfile.write('ERROR'.encode('utf-8'))
+            print("Decode error: {}".format(post_data))
         if data is not None:
             if serverOnly:
                 print(json.dumps(data, indent=2))
