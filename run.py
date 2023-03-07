@@ -86,7 +86,7 @@ class MyServer(BaseHTTPRequestHandler):
         try:
             data = json.loads(post_data)
             self.wfile.write('OK'.encode('utf-8'))
-        except json.decoder.JSONDecoderError:
+        except json.decoder.JSONDecodeError:
             data = None
             self.wfile.write('ERROR'.encode('utf-8'))
         if data is not None:
