@@ -83,10 +83,15 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write('OK'.encode('utf-8'))
-        data = json.loads(post_data)
-        if serverOnly:
-            print(json.dumps(data, indent=2))
+        try:
+            data = json.loads(post_data)
+            self.wfile.write('OK'.encode('utf-8'))
+        except json.decode.JSONDecoderError:
+            data = None
+            self.wfile.write('ERROR'.encode('utf-8'))
+        if data is not None:
+            if serverOnly:
+                print(json.dumps(data, indent=2))
 
 
 @click.command()
