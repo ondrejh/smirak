@@ -45,7 +45,11 @@ class InfoPoller(Thread):
     def get(self):
         global info
         info = get_info()
-        x = requests.post(url, json=info)
+        try:
+            x = requests.post(url, json=info)
+            info['con'] = (x == 200)
+        except:
+            info['con'] = False
         #print(x.text)
         #print(info)
     def stop(self):
@@ -102,6 +106,7 @@ def run(server):
     serverOnly = server
     if serverOnly:
         print('Run server only (no local data aquisition).')
+        url = "http://192.168.1.108:" + str(port)
 
     global info
 
