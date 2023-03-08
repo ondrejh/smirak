@@ -13,7 +13,8 @@ from collect import get_info
 
 host = "localhost"
 port = 8080
-url = "http://" + str(host) + ":" + str(port)
+#url = "http://" + str(host) + ":" + str(port)
+url = "http://192.168.1.108:" + str(port)
 
 serverOnly = False
 
@@ -47,9 +48,11 @@ class InfoPoller(Thread):
         info = get_info()
         try:
             x = requests.post(url, json=info)
-            info['con'] = (x == 200)
+            info["con"] = (x == 200)
+            print("Server OK")
         except:
-            info['con'] = False
+            info["con"] = False
+            print("Server FAILED")
         #print(x.text)
         #print(info)
     def stop(self):
@@ -106,7 +109,6 @@ def run(server):
     serverOnly = server
     if serverOnly:
         print('Run server only (no local data aquisition).')
-        url = "http://192.168.1.108:" + str(port)
 
     global info
 
