@@ -3,15 +3,52 @@
   <head>
     <meta charset="utf-8">
     <title>Můj počítač</title>
+    <!--<link rel="stylesheet" href="style.css">-->
+    <style>
+
+table {
+	font-family: Arial, Helvetica, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #ddd;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+tr:hover {
+	background-color: #ddd;
+}
+
+th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #04AA6D;
+	color: white;
+}
+
+    </style>
+    <script src="script.js"></script>
   </head>
-  <body onload="load()">
-    <table>
+  <body>
+    <table class="tab">
       <tr><th>Uživatel</th><td id="user"></td></tr>
       <tr><th>IP adresa</th><td id="ip"></td></tr>
       <tr><th>MAC adresa</th><td id="mac"></td></tr>
     </table>
-    <table id="apps">
-      <tr><th>PID</th><th>Program</th><th>Popis</th></tr>
+    <table class="tab">
+      <thead>
+        <tr><th>PID</th><th>Program</th><th>Popis</th></tr>
+      </thead>
+      <tbody id="apps">
+        <tr><td>123</td><td>Software</td><td>Software do moving data</td></tr>
+      </tbody>
     </table>
   </body>
   <script>
@@ -22,7 +59,7 @@
           document.getElementById("user").innerText = json["user"];
           document.getElementById("ip").innerText = json["ip"];
           document.getElementById("mac").innerText = json["mac"];
-          let tab = "<tr><th>Id</th><th>Program</th><th>Popis</th></tr>\n";
+          let tab = "";
           for (const element of json["apps"]) {
             tab += "<tr><td>" + element[0] + "</td><td>" + element[1] + "</td><td>" + element[2] + "</td></tr>\n";
           }
@@ -30,5 +67,6 @@
         });
       setTimeout(load, 2000);
     }
+    window.onload = load();
   </script>
 </html>

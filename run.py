@@ -32,7 +32,7 @@ def getHeader(fname):
     if ext == 'ico':
         return 'image/x-icon'
     if ext == 'css':
-        return 'text/css'
+        return 'text/html'
     if ext == 'js':
         return 'text/javascript'
     return 'text/html'
